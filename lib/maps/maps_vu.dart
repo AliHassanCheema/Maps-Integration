@@ -40,7 +40,7 @@ class MapsVU extends StackedView<MapsVM> {
   @override
   MapsVM viewModelBuilder(BuildContext context) {
     final vm = MapsVM();
-    vm.onGetLocationPermissions();
+    vm.onGetLocationPermissions(context);
     return vm;
   }
 }
