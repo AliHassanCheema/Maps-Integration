@@ -4,13 +4,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stacked/stacked.dart';
 
 class MapsVM extends BaseViewModel {
-  LatLng? latLng;
+  LatLng latLng = const LatLng(33.6397947, 72.9977447);
 
-  onGetLocationPermissions(BuildContext context) async {
+  onGetCurrentLocation(BuildContext context) async {
     setBusy(true);
     Position position = await getCurrentPosition(context);
     latLng = LatLng(position.latitude, position.longitude);
-    notifyListeners();
+    setBusy(false);
   }
 
   /// Determine the current position of the device.
@@ -37,7 +37,8 @@ class MapsVM extends BaseViewModel {
           'Location permissions are permanently denied, we cannot request permissions.');
       await Geolocator.openLocationSettings();
     }
-    return await Geolocator.getCurrentPosition();
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 }
 

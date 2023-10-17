@@ -15,7 +15,7 @@ class MapsVU extends StackedView<MapsVM> {
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true),
-      body: viewModel.latLng == null
+      body: viewModel.isBusy
           ? const LinearProgressIndicator()
           : GoogleMap(
               zoomControlsEnabled: true,
@@ -27,12 +27,10 @@ class MapsVU extends StackedView<MapsVM> {
                     // infoWindow: const InfoWindow(
                     //     title: 'Google Map Test'),
                     icon: BitmapDescriptor.defaultMarker,
-                    position: viewModel.latLng!)
+                    position: viewModel.latLng)
               },
               initialCameraPosition: CameraPosition(
-                  target: viewModel.latLng!,
-                  tilt: 59.440717697143555,
-                  zoom: 16),
+                  target: viewModel.latLng, tilt: 59.440717697143555, zoom: 16),
             ),
     );
   }
@@ -40,7 +38,7 @@ class MapsVU extends StackedView<MapsVM> {
   @override
   MapsVM viewModelBuilder(BuildContext context) {
     final vm = MapsVM();
-    vm.onGetLocationPermissions(context);
+    vm.onGetCurrentLocation(context);
     return vm;
   }
 }
