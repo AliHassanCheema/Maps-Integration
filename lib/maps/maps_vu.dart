@@ -15,27 +15,32 @@ class MapsVU extends StackedView<MapsVM> {
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true),
-      body: GoogleMap(
-        zoomControlsEnabled: true,
-        // myLocationButtonEnabled: true,
-        // myLocationEnabled: true,
-        // mapToolbarEnabled: true,
-        // markers: {
-        //   Marker(
-        //       markerId: const MarkerId('1'),
-        //       // infoWindow: const InfoWindow(
-        //       //     title: 'Google Map Test'),
-        //       icon: BitmapDescriptor.defaultMarker,
-        //       position: viewModel.latLng)
-        // },
-        initialCameraPosition: CameraPosition(
-            target: viewModel.latLng, tilt: 59.440717697143555, zoom: 16),
-      ),
+      body: viewModel.latLng == null
+          ? const LinearProgressIndicator()
+          : GoogleMap(
+              zoomControlsEnabled: true,
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+              markers: {
+                Marker(
+                    markerId: const MarkerId('1'),
+                    // infoWindow: const InfoWindow(
+                    //     title: 'Google Map Test'),
+                    icon: BitmapDescriptor.defaultMarker,
+                    position: viewModel.latLng!)
+              },
+              initialCameraPosition: CameraPosition(
+                  target: viewModel.latLng!,
+                  tilt: 59.440717697143555,
+                  zoom: 16),
+            ),
     );
   }
 
   @override
   MapsVM viewModelBuilder(BuildContext context) {
-    return MapsVM();
+    final vm = MapsVM();
+    vm.onGetLocationPermissions();
+    return vm;
   }
 }
