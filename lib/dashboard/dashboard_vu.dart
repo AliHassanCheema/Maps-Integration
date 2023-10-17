@@ -18,6 +18,31 @@ class DashboardVU extends StackedView<DashboardVM> {
     return DashboardVM();
   }
 
+  Widget _dashboardGridCell(
+      DashboardVM viewModel, BuildContext context, int index) {
+    return GestureDetector(
+      onTap: () {
+        viewModel.onClickGridItem(
+            context, viewModel.dashboardGrid[index].title);
+      },
+      child: Card(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(viewModel.dashboardGrid[index].icon, color: Colors.red),
+            const SizedBox(height: 12),
+            Text(
+              viewModel.dashboardGrid[index].title,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _dashboardGrid(DashboardVM viewModel) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -26,28 +51,7 @@ class DashboardVU extends StackedView<DashboardVM> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
           itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                viewModel.onClickGridItem(
-                    context, viewModel.dashboardGrid[index].title);
-              },
-              child: Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(viewModel.dashboardGrid[index].icon,
-                        color: Colors.red),
-                    const SizedBox(height: 12),
-                    Text(
-                      viewModel.dashboardGrid[index].title,
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return _dashboardGridCell(viewModel, context, index);
           }),
     );
   }

@@ -12,14 +12,7 @@ class CurrentLocationVU extends StackedView<CurrentLocationVM> {
     return Scaffold(
       appBar: AppBar(title: const Text('Current Location')),
       body: _googleMapWidget(viewModel),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'fab',
-        shape: const StadiumBorder(),
-        onPressed: () {
-          viewModel.onGetCurrentLocation(context);
-        },
-        child: const Icon(Icons.location_searching_outlined),
-      ),
+      floatingActionButton: _currentLocationButton(viewModel, context),
     );
   }
 
@@ -27,6 +20,18 @@ class CurrentLocationVU extends StackedView<CurrentLocationVM> {
   CurrentLocationVM viewModelBuilder(BuildContext context) {
     final vm = CurrentLocationVM();
     return vm;
+  }
+
+  Widget _currentLocationButton(
+      CurrentLocationVM viewModel, BuildContext context) {
+    return FloatingActionButton(
+      heroTag: 'fab',
+      shape: const StadiumBorder(),
+      onPressed: () {
+        viewModel.onGetCurrentLocation(context);
+      },
+      child: const Icon(Icons.location_searching_outlined),
+    );
   }
 
   Widget _googleMapWidget(CurrentLocationVM viewModel) {
