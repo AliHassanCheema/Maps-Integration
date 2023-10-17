@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Utils {
   static showSnackBar(BuildContext context, String msg) {
@@ -36,10 +37,9 @@ class Utils {
         desiredAccuracy: LocationAccuracy.high);
   }
 
-  static Future<String> getAddressFromCoordinates(
-      double latitude, double longitude) async {
+  static Future<String> getAddressFromCoordinates(LatLng latlng) async {
     List<Placemark> placemarks =
-        await placemarkFromCoordinates(latitude, longitude);
+        await placemarkFromCoordinates(latlng.latitude, latlng.longitude);
 
     if (placemarks.isEmpty) {
       return "No address found";

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maps_integration/dashboard/dashboard_model.dart';
-import 'package:maps_integration/maps/maps_vu.dart';
+import 'package:maps_integration/dashboard/current_location/current_location_vu.dart';
+import 'package:maps_integration/dashboard/edit_location/edit_location_vu.dart';
 import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
 
@@ -15,7 +16,10 @@ class DashboardVM extends BaseViewModel {
   onClickGridItem(BuildContext context, String title) {
     switch (title) {
       case 'Current Location':
-        Utils.pushRoute(context, const MapsVU());
+        Utils.pushRoute(context, const CurrentLocationVU());
+        break;
+      case 'Edit your Location':
+        Utils.pushRoute(context, const EditLocationVU());
         break;
       default:
     }

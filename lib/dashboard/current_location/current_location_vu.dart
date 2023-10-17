@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:maps_integration/maps/maps_vm.dart';
+import 'package:maps_integration/dashboard/current_location/current_location_vm.dart';
 import 'package:stacked/stacked.dart';
 
-class MapsVU extends StackedView<MapsVM> {
-  const MapsVU({super.key});
+class CurrentLocationVU extends StackedView<CurrentLocationVM> {
+  const CurrentLocationVU({super.key});
 
   @override
-  Widget builder(BuildContext context, MapsVM viewModel, Widget? child) {
+  Widget builder(
+      BuildContext context, CurrentLocationVM viewModel, Widget? child) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Maps Integration')),
+      appBar: AppBar(title: const Text('Current Location')),
       body: _googleMapWidget(viewModel),
       floatingActionButton: FloatingActionButton(
         heroTag: 'fab',
@@ -23,12 +24,12 @@ class MapsVU extends StackedView<MapsVM> {
   }
 
   @override
-  MapsVM viewModelBuilder(BuildContext context) {
-    final vm = MapsVM();
+  CurrentLocationVM viewModelBuilder(BuildContext context) {
+    final vm = CurrentLocationVM();
     return vm;
   }
 
-  Widget _googleMapWidget(MapsVM viewModel) {
+  Widget _googleMapWidget(CurrentLocationVM viewModel) {
     return GoogleMap(
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
