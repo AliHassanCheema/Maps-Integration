@@ -9,29 +9,10 @@ class MapsVU extends StackedView<MapsVM> {
   @override
   Widget builder(BuildContext context, MapsVM viewModel, Widget? child) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text(
-            'Maps Integration',
-            style: TextStyle(color: Colors.white),
-          ),
-          centerTitle: true),
+      appBar: AppBar(title: const Text('Maps Integration')),
       body: viewModel.isBusy
           ? const LinearProgressIndicator()
-          : GoogleMap(
-              zoomControlsEnabled: true,
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              markers: {
-                Marker(
-                    markerId: const MarkerId('1'),
-                    // infoWindow: const InfoWindow(
-                    //     title: 'Google Map Test'),
-                    icon: BitmapDescriptor.defaultMarker,
-                    position: viewModel.latLng)
-              },
-              initialCameraPosition: CameraPosition(
-                  target: viewModel.latLng, tilt: 59.440717697143555, zoom: 16),
-            ),
+          : _googleMapWidget(viewModel),
     );
   }
 
@@ -40,5 +21,25 @@ class MapsVU extends StackedView<MapsVM> {
     final vm = MapsVM();
     vm.onGetCurrentLocation(context);
     return vm;
+  }
+
+  Widget _googleMapWidget(MapsVM viewModel) {
+    return GoogleMap(
+      zoomControlsEnabled: false,
+      myLocationButtonEnabled: false,
+      myLocationEnabled: true,
+      markers: {
+        Marker(
+            markerId: const MarkerId('1'),
+            infoWindow: InfoWindow(
+                title: 'Address',
+                snippet: viewModel.address,
+                anchor: const Offset(0.5, 0.1)),
+            icon: BitmapDescriptor.defaultMarker,
+            position: viewModel.latLng)
+      },
+      initialCameraPosition: CameraPosition(
+          target: viewModel.latLng, tilt: 59.440717697143555, zoom: 16),
+    );
   }
 }
