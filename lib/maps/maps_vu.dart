@@ -10,16 +10,21 @@ class MapsVU extends StackedView<MapsVM> {
   Widget builder(BuildContext context, MapsVM viewModel, Widget? child) {
     return Scaffold(
       appBar: AppBar(title: const Text('Maps Integration')),
-      body: viewModel.isBusy
-          ? const LinearProgressIndicator()
-          : _googleMapWidget(viewModel),
+      body: _googleMapWidget(viewModel),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'fab',
+        shape: const StadiumBorder(),
+        onPressed: () {
+          viewModel.onGetCurrentLocation(context);
+        },
+        child: const Icon(Icons.location_searching_outlined),
+      ),
     );
   }
 
   @override
   MapsVM viewModelBuilder(BuildContext context) {
     final vm = MapsVM();
-    vm.onGetCurrentLocation(context);
     return vm;
   }
 
@@ -28,6 +33,9 @@ class MapsVU extends StackedView<MapsVM> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
+      onMapCreated: (controller) {
+        viewModel.onMapCreated(controller);
+      },
       markers: {
         Marker(
             markerId: const MarkerId('1'),
