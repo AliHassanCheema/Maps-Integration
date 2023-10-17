@@ -8,9 +8,7 @@ class EditLocationVM extends BaseViewModel {
   LatLng latLng = const LatLng(33.6397947, 72.9977447);
   String address = '';
   Set<Marker> marker = {};
-  // icon: BitmapDescriptor.fromBytes(await getBytesFromAsset(
-
-  //         'asset/icons/ic_car_top_view.png', 70)),
+// BitmapDescriptor icon = BitmapDescriptor.fromBytes(await getBytesFromAsset('asset/icons/ic_car_top_view.png', 70));
   GoogleMapController? mapController;
   onMapCreated(GoogleMapController controller) async {
     mapController ??= controller;

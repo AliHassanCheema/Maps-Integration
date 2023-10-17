@@ -44,6 +44,7 @@ class CurrentLocationVU extends StackedView<CurrentLocationVM> {
                 title: 'Address',
                 snippet: viewModel.address,
                 anchor: const Offset(0.5, 0.1)),
+            // icon: viewModel.pinIcon,
             icon: BitmapDescriptor.defaultMarker,
             position: viewModel.latLng)
       },

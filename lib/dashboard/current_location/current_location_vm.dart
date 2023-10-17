@@ -8,10 +8,17 @@ class CurrentLocationVM extends BaseViewModel {
   LatLng latLng = const LatLng(33.6397947, 72.9977447);
   String address = '';
   GoogleMapController? mapController;
+  BitmapDescriptor pinIcon = BitmapDescriptor.defaultMarker;
   onMapCreated(GoogleMapController controller) async {
     mapController ??= controller;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: latLng, zoom: 16.0)));
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(24, 24)),
+            'assets/pinLocation.png')
+        .then((onValue) {
+      pinIcon = onValue;
+    });
   }
 
   onGetCurrentLocation(BuildContext context) async {
@@ -19,5 +26,6 @@ class CurrentLocationVM extends BaseViewModel {
     latLng = LatLng(position.latitude, position.longitude);
     address = await Utils.getAddressFromCoordinates(latLng);
     onMapCreated(mapController!);
+    notifyListeners();
   }
 }
