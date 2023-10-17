@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maps_integration/mpas/maps_vu.dart';
+import 'package:maps_integration/maps/maps_vu.dart';
 
 void main() {
   runApp(const MyApp());
