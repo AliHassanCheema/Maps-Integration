@@ -4,9 +4,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Utils {
-  static showSnackBar(BuildContext context, String msg) {
+  static showSnackBar(BuildContext context, String msg, {bool isError = true}) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(msg, style: const TextStyle(color: Colors.green))));
+        backgroundColor: Colors.white38,
+        content: Text(msg,
+            style: TextStyle(color: isError ? Colors.red : Colors.green))));
   }
 
   /// Determine the current position of the device.

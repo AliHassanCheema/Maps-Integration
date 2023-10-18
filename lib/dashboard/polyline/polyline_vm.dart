@@ -8,14 +8,12 @@ import 'package:stacked/stacked.dart';
 import 'package:http/http.dart' as http;
 
 class PolylineVM extends BaseViewModel {
-  LatLng originLatlng = const LatLng(33.6397947, 72.9977447);
-  LatLng destinationLatlng = const LatLng(33.6844, 73.0479);
+  // LatLng originLatlng = const LatLng(33.6397947, 72.9977447);
+  // LatLng destinationLatlng = const LatLng(33.6844, 73.0479);
   GoogleMapController? mapController;
   Set<Polyline> polylines = {};
   Set<Marker> markers = {};
-  String desiredAddress = '';
-  String address = '';
-  // List<LatLng> polylinePoints = [];
+
   List<LatLng> isbCooordinates = [
     const LatLng(33.6397947, 72.9977447),
     const LatLng(33.6500, 73.0100),
@@ -26,9 +24,10 @@ class PolylineVM extends BaseViewModel {
 
   Future<void> fetchPolyline(context) async {
     String apiKey = 'AIzaSyDsef6naWlgUqZwYN1AB_lH611BDaSOxPY';
-    String origin = '${originLatlng.latitude},${originLatlng.longitude}';
+    String origin =
+        '${isbCooordinates.first.latitude},${isbCooordinates.first.longitude}';
     String destination =
-        '${destinationLatlng.latitude},${destinationLatlng.longitude}';
+        '${isbCooordinates.last.latitude},${isbCooordinates.last.longitude}';
     String apiUrl =
         'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$apiKey';
 
@@ -38,13 +37,17 @@ class PolylineVM extends BaseViewModel {
       if (resp['status'] == "REQUEST_DENIED") {
         Utils.showSnackBar(context, resp['error_message']);
       } else {
-        final routes = resp['routes'][0]['overview_polyline']['points'];
+        // final routes = resp['routes'][0]['overview_polyline']['points'];
       }
       notifyListeners();
     }
   }
 
   onAddMarkers() async {
+    BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(48, 48)),
+      'assets/car.png',
+    );
     for (int i = 0; i < isbCooordinates.length; i++) {
       String address =
           await Utils.getAddressFromCoordinates(isbCooordinates[i]);
@@ -55,7 +58,7 @@ class PolylineVM extends BaseViewModel {
                 title: 'Address',
                 snippet: address,
                 anchor: const Offset(0.5, 0.1)),
-            icon: BitmapDescriptor.defaultMarker,
+            icon: i > 0 && i < 5 ? customIcon : BitmapDescriptor.defaultMarker,
             position: isbCooordinates[i]),
       );
     }
@@ -76,12 +79,11 @@ class PolylineVM extends BaseViewModel {
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: originLatlng,
+          target: isbCooordinates.first,
           zoom: 16.0,
         ),
       ),
     );
-    desiredAddress = await Utils.getAddressFromCoordinates(destinationLatlng);
 
     onAddMarkers();
 
@@ -91,9 +93,7 @@ class PolylineVM extends BaseViewModel {
 
   onGetCurrentLocation(context) async {
     Position position = await Utils.getCurrentPosition(context);
-    originLatlng = LatLng(position.latitude, position.longitude);
-    isbCooordinates.insert(0, originLatlng);
-    address = await Utils.getAddressFromCoordinates(originLatlng);
+    isbCooordinates.insert(0, LatLng(position.latitude, position.longitude));
     onMapCreated(mapController!, context);
     notifyListeners();
   }

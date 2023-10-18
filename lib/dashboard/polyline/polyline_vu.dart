@@ -45,7 +45,9 @@ class PolylineVU extends StackedView<PolylineVM> {
       markers: viewModel.markers,
       polylines: viewModel.polylines,
       initialCameraPosition: CameraPosition(
-          target: viewModel.originLatlng, tilt: 59.440717697143555, zoom: 16),
+          target: viewModel.isbCooordinates.last,
+          tilt: 59.440717697143555,
+          zoom: 16),
     );
   }
 }
