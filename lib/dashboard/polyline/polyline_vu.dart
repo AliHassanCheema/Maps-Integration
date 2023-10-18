@@ -10,8 +10,8 @@ class PolylineVU extends StackedView<PolylineVM> {
   Widget builder(BuildContext context, PolylineVM viewModel, Widget? child) {
     return Scaffold(
       appBar: AppBar(title: const Text('Polyline between locations')),
-      body: _googleMapWidget(viewModel),
-      floatingActionButton: currentLocationButton(viewModel, context),
+      body: _googleMapWidget(viewModel, context),
+      floatingActionButton: _currentLocationButton(viewModel, context),
     );
   }
 
@@ -21,7 +21,7 @@ class PolylineVU extends StackedView<PolylineVM> {
     return vm;
   }
 
-  Widget currentLocationButton(PolylineVM viewModel, BuildContext context) {
+  Widget _currentLocationButton(PolylineVM viewModel, BuildContext context) {
     return FloatingActionButton(
       heroTag: 'fab',
       shape: const StadiumBorder(),
@@ -32,13 +32,13 @@ class PolylineVU extends StackedView<PolylineVM> {
     );
   }
 
-  Widget _googleMapWidget(PolylineVM viewModel) {
+  Widget _googleMapWidget(PolylineVM viewModel, BuildContext context) {
     return GoogleMap(
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
       onMapCreated: (controller) {
-        viewModel.onMapCreated(controller);
+        viewModel.onMapCreated(controller, context);
       },
       markers: {
         Marker(
@@ -48,7 +48,7 @@ class PolylineVU extends StackedView<PolylineVM> {
                 snippet: viewModel.address,
                 anchor: const Offset(0.5, 0.1)),
             icon: BitmapDescriptor.defaultMarker,
-            position: viewModel.latLng),
+            position: viewModel.originLatlng),
         Marker(
             markerId: const MarkerId('2'),
             infoWindow: InfoWindow(
@@ -56,11 +56,11 @@ class PolylineVU extends StackedView<PolylineVM> {
                 snippet: viewModel.desiredAddress,
                 anchor: const Offset(0.5, 0.1)),
             icon: BitmapDescriptor.defaultMarker,
-            position: viewModel.desiredLatlng)
+            position: viewModel.destinationLatlng)
       },
       polylines: viewModel.polylines,
       initialCameraPosition: CameraPosition(
-          target: viewModel.latLng, tilt: 59.440717697143555, zoom: 16),
+          target: viewModel.originLatlng, tilt: 59.440717697143555, zoom: 16),
     );
   }
 }

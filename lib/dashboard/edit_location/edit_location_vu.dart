@@ -46,6 +46,9 @@ class EditLocationVU extends StackedView<EditLocationVM> {
       onTap: (latlng) {
         viewModel.onSelectLocation(latlng);
       },
+      onLongPress: (latlng) {
+        viewModel.onSelectLocation(latlng);
+      },
       initialCameraPosition: CameraPosition(
           target: viewModel.latLng, tilt: 59.440717697143555, zoom: 16),
     );

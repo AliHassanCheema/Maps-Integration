@@ -15,7 +15,9 @@ class DashboardVU extends StackedView<DashboardVM> {
 
   @override
   DashboardVM viewModelBuilder(BuildContext context) {
-    return DashboardVM();
+    final vm = DashboardVM();
+    vm.onCheckPermission(context);
+    return vm;
   }
 
   Widget _dashboardGridCell(

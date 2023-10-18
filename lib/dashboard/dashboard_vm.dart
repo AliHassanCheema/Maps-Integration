@@ -14,6 +14,10 @@ class DashboardVM extends BaseViewModel {
     DashBoardModel('Location Searching', Icons.location_searching),
   ];
 
+  onCheckPermission(BuildContext context) async {
+    await Utils.getCurrentPosition(context);
+  }
+
   onClickGridItem(BuildContext context, String title) {
     switch (title) {
       case 'Current Location':
