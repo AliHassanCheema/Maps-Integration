@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/dashboard/dashboard_vm.dart';
 import 'package:stacked/stacked.dart';
 
@@ -48,13 +49,37 @@ class DashboardVU extends StackedView<DashboardVM> {
   Widget _dashboardGrid(DashboardVM viewModel) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: GridView.builder(
-          itemCount: viewModel.dashboardGrid.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
-          itemBuilder: (context, index) {
-            return _dashboardGridCell(viewModel, context, index);
-          }),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Select Map type'),
+          _mapTypeDropdown(viewModel),
+          Expanded(
+            child: GridView.builder(
+                itemCount: viewModel.dashboardGrid.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 4.0,
+                    mainAxisSpacing: 4.0),
+                itemBuilder: (context, index) {
+                  return _dashboardGridCell(viewModel, context, index);
+                }),
+          ),
+        ],
+      ),
     );
+  }
+
+  DropdownButton<MapType> _mapTypeDropdown(DashboardVM viewModel) {
+    return DropdownButton(
+        isExpanded: true,
+        value: viewModel.defaultMapType,
+        items: viewModel.mapTypes.map((MapType mapType) {
+          return DropdownMenuItem<MapType>(
+            value: mapType,
+            child: Text(mapType.toString().split('.').last),
+          );
+        }).toList(),
+        onChanged: viewModel.onChangeMapType);
   }
 }

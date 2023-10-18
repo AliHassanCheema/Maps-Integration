@@ -4,13 +4,14 @@ import 'package:maps_integration/dashboard/edit_location/edit_location_vm.dart';
 import 'package:stacked/stacked.dart';
 
 class EditLocationVU extends StackedView<EditLocationVM> {
-  const EditLocationVU({super.key});
+  const EditLocationVU({super.key, this.mapType = MapType.normal});
+  final MapType mapType;
 
   @override
   Widget builder(
       BuildContext context, EditLocationVM viewModel, Widget? child) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Location')),
+      appBar: AppBar(title: const Text('Select Location')),
       body: _googleMapWidget(viewModel),
       floatingActionButton: _currentLocationButton(viewModel, context),
     );
@@ -39,6 +40,7 @@ class EditLocationVU extends StackedView<EditLocationVM> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
+      mapType: mapType,
       onMapCreated: (controller) {
         viewModel.onMapCreated(controller);
       },

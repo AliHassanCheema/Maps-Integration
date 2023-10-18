@@ -4,7 +4,8 @@ import 'package:maps_integration/dashboard/current_location/current_location_vm.
 import 'package:stacked/stacked.dart';
 
 class CurrentLocationVU extends StackedView<CurrentLocationVM> {
-  const CurrentLocationVU({super.key});
+  const CurrentLocationVU({super.key, this.mapType = MapType.normal});
+  final MapType mapType;
 
   @override
   Widget builder(
@@ -39,6 +40,7 @@ class CurrentLocationVU extends StackedView<CurrentLocationVM> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
+      mapType: mapType,
       onMapCreated: (controller) {
         viewModel.onMapCreated(controller);
       },

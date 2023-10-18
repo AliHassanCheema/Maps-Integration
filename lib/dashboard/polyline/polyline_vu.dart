@@ -4,12 +4,13 @@ import 'package:maps_integration/dashboard/polyline/polyline_vm.dart';
 import 'package:stacked/stacked.dart';
 
 class PolylineVU extends StackedView<PolylineVM> {
-  const PolylineVU({super.key});
+  const PolylineVU({super.key, this.mapType = MapType.normal});
+  final MapType mapType;
 
   @override
   Widget builder(BuildContext context, PolylineVM viewModel, Widget? child) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Polyline between locations')),
+      appBar: AppBar(title: const Text('Polyline Location')),
       body: _googleMapWidget(viewModel, context),
       floatingActionButton: _currentLocationButton(viewModel, context),
     );
@@ -37,27 +38,11 @@ class PolylineVU extends StackedView<PolylineVM> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
+      mapType: mapType,
       onMapCreated: (controller) {
         viewModel.onMapCreated(controller, context);
       },
-      markers: {
-        Marker(
-            markerId: const MarkerId('1'),
-            infoWindow: InfoWindow(
-                title: 'Address',
-                snippet: viewModel.address,
-                anchor: const Offset(0.5, 0.1)),
-            icon: BitmapDescriptor.defaultMarker,
-            position: viewModel.originLatlng),
-        Marker(
-            markerId: const MarkerId('2'),
-            infoWindow: InfoWindow(
-                title: 'Address',
-                snippet: viewModel.desiredAddress,
-                anchor: const Offset(0.5, 0.1)),
-            icon: BitmapDescriptor.defaultMarker,
-            position: viewModel.destinationLatlng)
-      },
+      markers: viewModel.markers,
       polylines: viewModel.polylines,
       initialCameraPosition: CameraPosition(
           target: viewModel.originLatlng, tilt: 59.440717697143555, zoom: 16),
