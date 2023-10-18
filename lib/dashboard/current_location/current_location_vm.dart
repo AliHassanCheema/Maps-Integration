@@ -14,12 +14,6 @@ class CurrentLocationVM extends BaseViewModel {
     mapController ??= controller;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: latLng, zoom: 16.0)));
-    BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(size: Size(24, 24)),
-            'assets/pinLocation.png')
-        .then((onValue) {
-      pinIcon = onValue;
-    });
   }
 
   onGetCurrentLocation(BuildContext context) async {

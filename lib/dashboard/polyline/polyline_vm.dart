@@ -8,8 +8,6 @@ import 'package:stacked/stacked.dart';
 import 'package:http/http.dart' as http;
 
 class PolylineVM extends BaseViewModel {
-  // LatLng originLatlng = const LatLng(33.6397947, 72.9977447);
-  // LatLng destinationLatlng = const LatLng(33.6844, 73.0479);
   GoogleMapController? mapController;
   Set<Polyline> polylines = {};
   Set<Marker> markers = {};
@@ -21,6 +19,20 @@ class PolylineVM extends BaseViewModel {
     const LatLng(33.6700, 73.0300),
     const LatLng(33.6844, 73.0479)
   ];
+
+  // onGetPolyLinePoints() async {
+  //   PolylinePoints polylinePoints = PolylinePoints();
+  //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+  //       'AIzaSyDsef6naWlgUqZwYN1AB_lH611BDaSOxPY',
+  //       PointLatLng(
+  //           isbCooordinates.first.latitude, isbCooordinates.first.longitude),
+  //       PointLatLng(
+  //           isbCooordinates.last.latitude, isbCooordinates.last.longitude));
+  //   debugPrint(' ============================= $result');
+  //   if (result.points.isNotEmpty) {
+  //     debugPrint('${result.points}');
+  //   }
+  // }
 
   Future<void> fetchPolyline(context) async {
     String apiKey = 'AIzaSyDsef6naWlgUqZwYN1AB_lH611BDaSOxPY';
@@ -39,12 +51,11 @@ class PolylineVM extends BaseViewModel {
       } else {
         // final routes = resp['routes'][0]['overview_polyline']['points'];
       }
-      notifyListeners();
     }
   }
 
   onAddMarkers() async {
-    BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
+    BitmapDescriptor carIcon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(size: Size(48, 48)),
       'assets/car.png',
     );
@@ -58,7 +69,7 @@ class PolylineVM extends BaseViewModel {
                 title: 'Address',
                 snippet: address,
                 anchor: const Offset(0.5, 0.1)),
-            icon: i > 0 && i < 5 ? customIcon : BitmapDescriptor.defaultMarker,
+            icon: i > 0 && i < 5 ? carIcon : BitmapDescriptor.defaultMarker,
             position: isbCooordinates[i]),
       );
     }
@@ -85,9 +96,9 @@ class PolylineVM extends BaseViewModel {
       ),
     );
 
-    onAddMarkers();
-
-    fetchPolyline(context);
+    await onAddMarkers();
+    // onGetPolyLinePoints();
+    await fetchPolyline(context);
     notifyListeners();
   }
 
@@ -95,6 +106,5 @@ class PolylineVM extends BaseViewModel {
     Position position = await Utils.getCurrentPosition(context);
     isbCooordinates.insert(0, LatLng(position.latitude, position.longitude));
     onMapCreated(mapController!, context);
-    notifyListeners();
   }
 }

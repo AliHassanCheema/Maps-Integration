@@ -38,6 +38,7 @@ class PolylineVU extends StackedView<PolylineVM> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
+      trafficEnabled: true,
       mapType: mapType,
       onMapCreated: (controller) {
         viewModel.onMapCreated(controller, context);

@@ -41,6 +41,9 @@ class CurrentLocationVU extends StackedView<CurrentLocationVM> {
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
       mapType: mapType,
+      compassEnabled: true,
+      trafficEnabled: true,
+      indoorViewEnabled: true,
       onMapCreated: (controller) {
         viewModel.onMapCreated(controller);
       },

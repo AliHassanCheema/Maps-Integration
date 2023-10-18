@@ -40,6 +40,7 @@ class EditLocationVU extends StackedView<EditLocationVM> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
+      trafficEnabled: true,
       mapType: mapType,
       onMapCreated: (controller) {
         viewModel.onMapCreated(controller);
