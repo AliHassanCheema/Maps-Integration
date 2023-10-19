@@ -12,7 +12,9 @@ class CurrentLocationVU extends StackedView<CurrentLocationVM> {
       BuildContext context, CurrentLocationVM viewModel, Widget? child) {
     return Scaffold(
       appBar: AppBar(title: const Text('Current Location')),
-      body: _googleMapWidget(viewModel),
+      body: viewModel.latLng == null
+          ? const LinearProgressIndicator()
+          : _googleMapWidget(viewModel),
       floatingActionButton: _currentLocationButton(viewModel, context),
     );
   }
@@ -20,6 +22,7 @@ class CurrentLocationVU extends StackedView<CurrentLocationVM> {
   @override
   CurrentLocationVM viewModelBuilder(BuildContext context) {
     final vm = CurrentLocationVM();
+    vm.onGetCurrentLocation(context);
     return vm;
   }
 
@@ -56,10 +59,10 @@ class CurrentLocationVU extends StackedView<CurrentLocationVM> {
                 anchor: const Offset(0.5, 0.1)),
             // icon: viewModel.pinIcon,
             icon: BitmapDescriptor.defaultMarker,
-            position: viewModel.latLng)
+            position: viewModel.latLng!)
       },
       initialCameraPosition: CameraPosition(
-          target: viewModel.latLng, tilt: 59.440717697143555, zoom: 16),
+          target: viewModel.latLng!, tilt: 59.440717697143555, zoom: 16),
     );
   }
 }

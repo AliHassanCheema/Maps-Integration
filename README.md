@@ -1,5 +1,10 @@
 # Flutter Simple Maps Integration
 
+## Add your google api key in
+
+        lib/secrets.dart
+        android/app/src/main/AndroidManifest.xml  --line 9
+
 ## Features
 
 - **Minimalistic Approach:** This repository focuses on simplicity, making it ideal for beginners and experienced Flutter developers who need quick and easy map integration.

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maps_integration/secrets.dart';
 import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,7 @@ class PolylineVM extends BaseViewModel {
   // onGetPolyLinePoints() async {
   //   PolylinePoints polylinePoints = PolylinePoints();
   //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-  //       'AIzaSyDsef6naWlgUqZwYN1AB_lH611BDaSOxPY',
+  //       googleMapsApiKey,
   //       PointLatLng(
   //           isbCooordinates.first.latitude, isbCooordinates.first.longitude),
   //       PointLatLng(
@@ -35,13 +36,12 @@ class PolylineVM extends BaseViewModel {
   // }
 
   Future<void> fetchPolyline(context) async {
-    String apiKey = 'AIzaSyDsef6naWlgUqZwYN1AB_lH611BDaSOxPY';
     String origin =
         '${isbCooordinates.first.latitude},${isbCooordinates.first.longitude}';
     String destination =
         '${isbCooordinates.last.latitude},${isbCooordinates.last.longitude}';
     String apiUrl =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$apiKey';
+        'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$googleMapsApiKey';
 
     final response = await http.get(Uri.parse(apiUrl));
     if (response.statusCode == 200) {

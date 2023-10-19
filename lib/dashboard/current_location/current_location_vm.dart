@@ -6,21 +6,26 @@ import 'package:stacked/stacked.dart';
 
 class CurrentLocationVM extends BaseViewModel {
   BitmapDescriptor pinIcon = BitmapDescriptor.defaultMarker;
-  LatLng latLng = const LatLng(33.6397947, 72.9977447);
+  LatLng? latLng;
   GoogleMapController? mapController;
   String address = '';
 
   onMapCreated(GoogleMapController controller) async {
     mapController ??= controller;
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: latLng, zoom: 16.0)));
+        CameraPosition(target: latLng!, zoom: 16.0)));
+    notifyListeners();
   }
 
   onGetCurrentLocation(BuildContext context) async {
     Position position = await Utils.getCurrentPosition(context);
     latLng = LatLng(position.latitude, position.longitude);
-    address = await Utils.getAddressFromCoordinates(latLng);
-    onMapCreated(mapController!);
-    notifyListeners();
+    address = await Utils.getAddressFromCoordinates(latLng!);
+
+    if (mapController != null) {
+      onMapCreated(mapController!);
+    } else {
+      notifyListeners();
+    }
   }
 }
