@@ -4,9 +4,16 @@ import 'package:maps_integration/dashboard/current_location/current_location_vm.
 import 'package:stacked/stacked.dart';
 
 class CurrentLocationVU extends StackedView<CurrentLocationVM> {
-  const CurrentLocationVU({super.key, this.mapType = MapType.normal});
+  const CurrentLocationVU(
+      {super.key,
+      this.mapType = MapType.normal,
+      this.liteModeEnabled = false,
+      this.trafficEnabled = false,
+      this.indoorViewEnabled = false});
   final MapType mapType;
-
+  final bool liteModeEnabled;
+  final bool trafficEnabled;
+  final bool indoorViewEnabled;
   @override
   Widget builder(
       BuildContext context, CurrentLocationVM viewModel, Widget? child) {
@@ -45,8 +52,9 @@ class CurrentLocationVU extends StackedView<CurrentLocationVM> {
       myLocationEnabled: true,
       mapType: mapType,
       compassEnabled: true,
-      trafficEnabled: true,
-      indoorViewEnabled: true,
+      trafficEnabled: trafficEnabled,
+      indoorViewEnabled: indoorViewEnabled,
+      liteModeEnabled: liteModeEnabled,
       onMapCreated: (controller) {
         viewModel.onMapCreated(controller);
       },

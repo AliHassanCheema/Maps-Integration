@@ -4,9 +4,16 @@ import 'package:maps_integration/dashboard/edit_location/edit_location_vm.dart';
 import 'package:stacked/stacked.dart';
 
 class EditLocationVU extends StackedView<EditLocationVM> {
-  const EditLocationVU({super.key, this.mapType = MapType.normal});
+  const EditLocationVU(
+      {super.key,
+      this.mapType = MapType.normal,
+      this.liteModeEnabled = false,
+      this.trafficEnabled = false,
+      this.indoorViewEnabled = false});
   final MapType mapType;
-
+  final bool liteModeEnabled;
+  final bool trafficEnabled;
+  final bool indoorViewEnabled;
   @override
   Widget builder(
       BuildContext context, EditLocationVM viewModel, Widget? child) {
@@ -40,7 +47,9 @@ class EditLocationVU extends StackedView<EditLocationVM> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
-      trafficEnabled: true,
+      trafficEnabled: trafficEnabled,
+      indoorViewEnabled: indoorViewEnabled,
+      liteModeEnabled: liteModeEnabled,
       mapType: mapType,
       onMapCreated: (controller) {
         viewModel.onMapCreated(controller);

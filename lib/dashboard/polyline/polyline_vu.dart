@@ -4,8 +4,16 @@ import 'package:maps_integration/dashboard/polyline/polyline_vm.dart';
 import 'package:stacked/stacked.dart';
 
 class PolylineVU extends StackedView<PolylineVM> {
-  const PolylineVU({super.key, this.mapType = MapType.normal});
+  const PolylineVU(
+      {super.key,
+      this.mapType = MapType.normal,
+      this.liteModeEnabled = false,
+      this.trafficEnabled = false,
+      this.indoorViewEnabled = false});
   final MapType mapType;
+  final bool liteModeEnabled;
+  final bool trafficEnabled;
+  final bool indoorViewEnabled;
 
   @override
   Widget builder(BuildContext context, PolylineVM viewModel, Widget? child) {
@@ -38,7 +46,9 @@ class PolylineVU extends StackedView<PolylineVM> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
-      trafficEnabled: true,
+      trafficEnabled: trafficEnabled,
+      indoorViewEnabled: indoorViewEnabled,
+      liteModeEnabled: liteModeEnabled,
       mapType: mapType,
       onMapCreated: (controller) {
         viewModel.onMapCreated(controller, context);

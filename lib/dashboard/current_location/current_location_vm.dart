@@ -5,7 +5,6 @@ import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class CurrentLocationVM extends BaseViewModel {
-  BitmapDescriptor pinIcon = BitmapDescriptor.defaultMarker;
   LatLng? latLng;
   GoogleMapController? mapController;
   String address = '';

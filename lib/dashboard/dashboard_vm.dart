@@ -10,6 +10,9 @@ import 'package:stacked/stacked.dart';
 
 class DashboardVM extends BaseViewModel {
   MapType defaultMapType = MapType.normal;
+  bool trafficEnabled = false;
+  bool indoorViewEnabled = false;
+  bool liteModeEnabled = false;
   List<MapType> mapTypes = [
     MapType.none,
     MapType.normal,
@@ -35,16 +38,34 @@ class DashboardVM extends BaseViewModel {
   onClickGridItem(BuildContext context, String title) {
     switch (title) {
       case 'Current Location':
-        Utils.pushRoute(context, CurrentLocationVU(mapType: defaultMapType));
+        Utils.pushRoute(
+            context,
+            CurrentLocationVU(
+                mapType: defaultMapType,
+                liteModeEnabled: liteModeEnabled,
+                trafficEnabled: trafficEnabled,
+                indoorViewEnabled: indoorViewEnabled));
         break;
       case 'Select Location':
-        Utils.pushRoute(context, EditLocationVU(mapType: defaultMapType));
+        Utils.pushRoute(
+            context,
+            EditLocationVU(
+                mapType: defaultMapType,
+                liteModeEnabled: liteModeEnabled,
+                trafficEnabled: trafficEnabled,
+                indoorViewEnabled: indoorViewEnabled));
         break;
       case 'Polyline Location':
-        Utils.pushRoute(context, PolylineVU(mapType: defaultMapType));
+        Utils.pushRoute(
+            context,
+            PolylineVU(
+                mapType: defaultMapType,
+                liteModeEnabled: liteModeEnabled,
+                trafficEnabled: trafficEnabled,
+                indoorViewEnabled: indoorViewEnabled));
         break;
       case 'Search Location':
-        Utils.pushRoute(context,  SearchLocationVU(mapType: defaultMapType));
+        Utils.pushRoute(context, SearchLocationVU(mapType: defaultMapType));
         break;
 
       default:

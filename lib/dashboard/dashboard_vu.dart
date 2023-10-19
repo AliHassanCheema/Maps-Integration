@@ -54,6 +54,11 @@ class DashboardVU extends StackedView<DashboardVM> {
         children: [
           const Text('Select Map type'),
           _mapTypeDropdown(viewModel),
+          _switchButton(viewModel, viewModel.trafficEnabled, 'Show Traffic'),
+          _switchButton(
+              viewModel, viewModel.indoorViewEnabled, 'Show Indoor View'),
+          _switchButton(
+              viewModel, viewModel.liteModeEnabled, 'Show in lite mode'),
           Expanded(
             child: GridView.builder(
                 itemCount: viewModel.dashboardGrid.length,
@@ -70,6 +75,18 @@ class DashboardVU extends StackedView<DashboardVM> {
     );
   }
 
+  SwitchListTile _switchButton(
+      DashboardVM viewModel, bool switchVal, String title) {
+    return SwitchListTile(
+      value: switchVal,
+      onChanged: (v) {
+        switchVal = v;
+        viewModel.notifyListeners();
+      },
+      title: Text(title),
+    );
+  }
+
   DropdownButton<MapType> _mapTypeDropdown(DashboardVM viewModel) {
     return DropdownButton(
         isExpanded: true,
@@ -77,7 +94,7 @@ class DashboardVU extends StackedView<DashboardVM> {
         items: viewModel.mapTypes.map((MapType mapType) {
           return DropdownMenuItem<MapType>(
             value: mapType,
-            child: Text(mapType.toString().split('.').last),
+            child: Text(mapType.toString().split('.').last.toUpperCase()),
           );
         }).toList(),
         onChanged: viewModel.onChangeMapType);
