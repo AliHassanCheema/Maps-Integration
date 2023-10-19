@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/dashboard/dashboard_vm.dart';
@@ -54,11 +56,19 @@ class DashboardVU extends StackedView<DashboardVM> {
         children: [
           const Text('Select Map type'),
           _mapTypeDropdown(viewModel),
-          _switchButton(viewModel, viewModel.trafficEnabled, 'Show Traffic'),
-          _switchButton(
-              viewModel, viewModel.indoorViewEnabled, 'Show Indoor View'),
-          _switchButton(
-              viewModel, viewModel.liteModeEnabled, 'Show in lite mode'),
+          _switchButton((v) {
+            viewModel.trafficEnabled = v;
+            viewModel.notifyListeners();
+          }, viewModel.trafficEnabled, 'Show Traffic'),
+          _switchButton((v) {
+            viewModel.indoorViewEnabled = v;
+            viewModel.notifyListeners();
+          }, viewModel.indoorViewEnabled, 'Show Indoor View'),
+          if (Platform.isAndroid)
+            _switchButton((v) {
+              viewModel.liteModeEnabled = v;
+              viewModel.notifyListeners();
+            }, viewModel.liteModeEnabled, 'Show in lite mode'),
           Expanded(
             child: GridView.builder(
                 itemCount: viewModel.dashboardGrid.length,
@@ -76,13 +86,10 @@ class DashboardVU extends StackedView<DashboardVM> {
   }
 
   SwitchListTile _switchButton(
-      DashboardVM viewModel, bool switchVal, String title) {
+      void Function(bool)? onChanged, bool switchVal, String title) {
     return SwitchListTile(
       value: switchVal,
-      onChanged: (v) {
-        switchVal = v;
-        viewModel.notifyListeners();
-      },
+      onChanged: onChanged,
       title: Text(title),
     );
   }

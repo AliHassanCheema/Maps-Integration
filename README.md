@@ -3,7 +3,10 @@
 ## Add your google api key in
 
         lib/secrets.dart
-        android/app/src/main/AndroidManifest.xml  --line 9
+        android/app/src/main/AndroidManifest.xml
+        ios/Runner/AppDelegate.swift
+
+- **Also add permissions for both(android/iOS)**
 
 ## Features
 
