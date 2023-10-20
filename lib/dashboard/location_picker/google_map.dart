@@ -39,7 +39,19 @@ class _CHIGoogleMapState extends State<CHIGoogleMap> {
       body: widget.selectedLatLng == null
           ? const Center(child: CircularProgressIndicator())
           : _googleMapWidget(),
+      floatingActionButton: _currentLocationButton(context),
     ));
+  }
+
+  Widget _currentLocationButton(BuildContext context) {
+    return FloatingActionButton(
+      heroTag: 'fab',
+      shape: const StadiumBorder(),
+      onPressed: () {
+        _onGetCurrentLocation(context);
+      },
+      child: const Icon(Icons.location_searching_outlined),
+    );
   }
 
   Widget _googleMapWidget() {

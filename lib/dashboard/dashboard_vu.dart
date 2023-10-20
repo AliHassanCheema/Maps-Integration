@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/dashboard/dashboard_vm.dart';
 import 'package:maps_integration/dashboard/location_picker/location_picker.dart';
+import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class DashboardVU extends StackedView<DashboardVM> {
@@ -71,9 +72,10 @@ class DashboardVU extends StackedView<DashboardVM> {
               viewModel.notifyListeners();
             }, viewModel.liteModeEnabled, 'Show in lite mode'),
           CHILocationPicker(
-            pickerTitle: 'Select Your Location',
-            onGetLatLng: (latlng) {
-              debugPrint('===============Latlong Got bro');
+            pickerTitle: viewModel.pickerTitle,
+            onGetLatLng: (latlng) async {
+              viewModel.pickerTitle =
+                  await Utils.getAddressFromCoordinates(latlng);
             },
           ),
           Expanded(
