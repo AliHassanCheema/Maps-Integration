@@ -54,8 +54,8 @@ class Utils {
     return address;
   }
 
-  static pushRoute(BuildContext context, Widget route) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
+  static Future pushRoute(BuildContext context, Widget route) {
+    return Navigator.push(context, MaterialPageRoute(builder: (_) {
       return route;
     }));
   }
