@@ -23,8 +23,8 @@ class JazzcashPaymentVM extends BaseViewModel {
     String ppBillreference = "BillNo";
     String ppDescription = "Description for transaction";
     String ppLanguage = "EN";
-    String ppMerchantid = "";
-    String ppPassword = "";
+    String ppMerchantid = "MC10270";
+    String ppPassword = "243v3301x3";
 
     String ppReturnurl =
         "https://sandbox.jazzcash.com.pk/ApplicationAPI/API/Payment/DoTransaction";
@@ -35,7 +35,7 @@ class JazzcashPaymentVM extends BaseViewModel {
     String ppTxnrefno = tre.toString();
     String ppTxntype = "MWALLET";
     String ppmpf_1 = mobileController.text;
-    String integeritySalt = "";
+    String integeritySalt = "v1a01ygv54";
     String and = '&';
     String superdata = integeritySalt +
         and +

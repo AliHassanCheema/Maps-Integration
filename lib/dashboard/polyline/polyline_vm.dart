@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/secrets.dart';
 import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
-import 'package:http/http.dart' as http;
 
 class PolylineVM extends BaseViewModel {
   GoogleMapController? mapController;
@@ -15,64 +13,54 @@ class PolylineVM extends BaseViewModel {
 
   List<LatLng> isbCooordinates = [
     const LatLng(33.6397947, 72.9977447),
-    const LatLng(33.6500, 73.0100),
-    const LatLng(33.6600, 73.0200),
-    const LatLng(33.6700, 73.0300),
-    const LatLng(33.6844, 73.0479)
+    const LatLng(33.661546, 73.078217)
   ];
 
-  // onGetPolyLinePoints() async {
-  //   PolylinePoints polylinePoints = PolylinePoints();
-  //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-  //       googleMapsApiKey,
-  //       PointLatLng(
-  //           isbCooordinates.first.latitude, isbCooordinates.first.longitude),
-  //       PointLatLng(
-  //           isbCooordinates.last.latitude, isbCooordinates.last.longitude));
-  //   debugPrint(' ============================= $result');
-  //   if (result.points.isNotEmpty) {
-  //     debugPrint('${result.points}');
-  //   }
-  // }
-
-  Future<void> fetchPolyline(context) async {
-    String origin =
-        '${isbCooordinates.first.latitude},${isbCooordinates.first.longitude}';
-    String destination =
-        '${isbCooordinates.last.latitude},${isbCooordinates.last.longitude}';
-    String apiUrl =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$googleMapsApiKey';
-
-    final response = await http.get(Uri.parse(apiUrl));
-    if (response.statusCode == 200) {
-      final resp = json.decode(response.body);
-      if (resp['status'] == "REQUEST_DENIED") {
-        Utils.showSnackBar(context, resp['error_message']);
-      } else {
-        // final routes = resp['routes'][0]['overview_polyline']['points'];
-      }
+  onGetPolyLinePoints() async {
+    PolylinePoints polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleMapsApiKey,
+        PointLatLng(
+            isbCooordinates.first.latitude, isbCooordinates.first.longitude),
+        PointLatLng(
+            isbCooordinates.last.latitude, isbCooordinates.last.longitude));
+    if (result.points.isNotEmpty) {
+      isbCooordinates =
+          result.points.map((e) => LatLng(e.latitude, e.longitude)).toList();
+      debugPrint('${result.points}');
     }
   }
 
-  onAddMarkers() async {
+  onMakePolyline() async {
     BitmapDescriptor carIcon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(size: Size(48, 48)),
       'assets/car.png',
     );
-    for (int i = 0; i < isbCooordinates.length; i++) {
-      String address =
-          await Utils.getAddressFromCoordinates(isbCooordinates[i]);
-      markers.add(
-        Marker(
-            markerId: MarkerId('$i'),
-            infoWindow: InfoWindow(
-                title: 'Address',
-                snippet: address,
-                anchor: const Offset(0.5, 0.1)),
-            icon: i > 0 && i < 5 ? carIcon : BitmapDescriptor.defaultMarker,
-            position: isbCooordinates[i]),
-      );
-    }
+    String originAddress =
+        await Utils.getAddressFromCoordinates(isbCooordinates.first);
+    String destinationAddress =
+        await Utils.getAddressFromCoordinates(isbCooordinates.last);
+    markers.add(
+      Marker(
+          markerId: const MarkerId('1'),
+          infoWindow: InfoWindow(
+              title: 'Address',
+              snippet: originAddress,
+              anchor: const Offset(0.5, 0.1)),
+          icon: carIcon,
+          position: isbCooordinates.first),
+    );
+    markers.add(
+      Marker(
+          markerId: const MarkerId('2'),
+          infoWindow: InfoWindow(
+              title: 'Address',
+              snippet: destinationAddress,
+              anchor: const Offset(0.5, 0.1)),
+          icon: BitmapDescriptor.defaultMarker,
+          position: isbCooordinates.last),
+    );
+
     polylines = {
       Polyline(
         startCap: Cap.roundCap,
@@ -87,6 +75,8 @@ class PolylineVM extends BaseViewModel {
 
   onMapCreated(GoogleMapController controller, context) async {
     mapController ??= controller;
+    Position position = await Utils.getCurrentPosition(context);
+    isbCooordinates.first = LatLng(position.latitude, position.longitude);
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -95,16 +85,14 @@ class PolylineVM extends BaseViewModel {
         ),
       ),
     );
-
-    await onAddMarkers();
-    // onGetPolyLinePoints();
-    await fetchPolyline(context);
+    await onGetPolyLinePoints();
+    await onMakePolyline();
     notifyListeners();
   }
 
   onGetCurrentLocation(context) async {
     Position position = await Utils.getCurrentPosition(context);
-    isbCooordinates.insert(0, LatLng(position.latitude, position.longitude));
+    isbCooordinates.first = LatLng(position.latitude, position.longitude);
     onMapCreated(mapController!, context);
   }
 }

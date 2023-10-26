@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/dashboard/dashboard_vm.dart';
 import 'package:maps_integration/dashboard/location_picker/location_picker.dart';
+import 'package:maps_integration/dashboard/polyline.dart';
 import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
 
@@ -14,7 +15,7 @@ class DashboardVU extends StackedView<DashboardVM> {
   Widget builder(BuildContext context, DashboardVM viewModel, Widget? child) {
     return Scaffold(
       appBar: AppBar(title: const Text('Maps DashBoard')),
-      body: _dashboardGrid(viewModel),
+      body: _dashboardGrid(viewModel, context),
     );
   }
 
@@ -50,7 +51,7 @@ class DashboardVU extends StackedView<DashboardVM> {
     );
   }
 
-  Widget _dashboardGrid(DashboardVM viewModel) {
+  Widget _dashboardGrid(DashboardVM viewModel, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
@@ -72,11 +73,37 @@ class DashboardVU extends StackedView<DashboardVM> {
               viewModel.notifyListeners();
             }, viewModel.liteModeEnabled, 'Show in lite mode'),
           CHILocationPicker(
-            pickerTitle: viewModel.pickerTitle,
+            pickerTitle: viewModel.originLocation,
             onGetLatLng: (latlng) async {
-              viewModel.pickerTitle =
+              viewModel.originLatLng = latlng;
+              viewModel.originLocation =
                   await Utils.getAddressFromCoordinates(latlng);
             },
+          ),
+          CHILocationPicker(
+            pickerTitle: viewModel.destinationLocation,
+            onGetLatLng: (latlng) async {
+              viewModel.destinationLatLng = latlng;
+              viewModel.destinationLocation =
+                  await Utils.getAddressFromCoordinates(latlng);
+              viewModel.notifyListeners();
+            },
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+                onPressed: viewModel.originLatLng != null &&
+                        viewModel.destinationLatLng != null
+                    ? () {
+                        Utils.pushRoute(
+                            context,
+                            CHIPolylineWidget(polylineCoordinates: [
+                              viewModel.originLatLng!,
+                              viewModel.destinationLatLng!
+                            ]));
+                      }
+                    : null,
+                child: const Text('Show Directions')),
           ),
           Expanded(
             child: GridView.builder(

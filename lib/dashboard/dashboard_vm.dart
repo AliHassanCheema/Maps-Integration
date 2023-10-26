@@ -9,7 +9,10 @@ import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class DashboardVM extends BaseViewModel {
-  String pickerTitle = 'Select Your Location';
+  LatLng? originLatLng;
+  LatLng? destinationLatLng;
+  String originLocation = 'Select Your origin';
+  String destinationLocation = 'Select Your Destination';
   MapType defaultMapType = MapType.normal;
   bool trafficEnabled = false;
   bool indoorViewEnabled = false;

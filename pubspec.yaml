@@ -42,6 +42,7 @@ dependencies:
   flutter_credit_card: ^4.0.1
   intl: ^0.18.1
   crypto: ^3.0.3
+  flutter_polyline_points: ^2.0.0
 
 dev_dependencies:
   flutter_test:
