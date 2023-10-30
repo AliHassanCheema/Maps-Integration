@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class SearchLocationVM extends BaseViewModel {
   List<LatLng> coordinates = [];
   Set<Polyline> polylines = {};
   Set<Marker> markers = {};
+  Timer? timer;
   String? duration;
   String? distance;
   GoogleMapController? googleMapController;
@@ -48,24 +50,50 @@ class SearchLocationVM extends BaseViewModel {
     }
   }
 
-  onClickSearchedItem(SearchLocation searchLocation, BuildContext context) {
+  onClickSearchedItem(
+      SearchLocation searchLocation, BuildContext context) async {
     searchController.text = searchLocation.name;
     FocusManager.instance.primaryFocus?.unfocus();
     searchLocations.clear();
+    if (coordinates.length > 1) {
+      coordinates.removeAt(1);
+      polylines.clear();
+    }
     coordinates.add(LatLng(searchLocation.lat, searchLocation.lng));
-    onMapCreated(googleMapController!, context);
+    await onMapCreated(googleMapController!, context);
   }
 
   onMapCreated(GoogleMapController controller, context) async {
     googleMapController ??= controller;
     controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: coordinates.last,
-          zoom: 16.0,
-        ),
-      ),
+      polylines.isNotEmpty
+          ? CameraUpdate.newLatLngBounds(
+              LatLngBounds(
+                  southwest: LatLng(
+                      coordinates.first.latitude <= coordinates.last.latitude
+                          ? coordinates.first.latitude
+                          : coordinates.last.latitude,
+                      coordinates.first.longitude <= coordinates.last.longitude
+                          ? coordinates.first.longitude
+                          : coordinates.last.longitude),
+                  northeast: LatLng(
+                      coordinates.first.latitude <= coordinates.last.latitude
+                          ? coordinates.last.latitude
+                          : coordinates.first.latitude,
+                      coordinates.first.longitude <= coordinates.last.longitude
+                          ? coordinates.last.longitude
+                          : coordinates.first.longitude)),
+              60)
+          : CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: coordinates.last,
+                zoom: 16.0,
+              ),
+            ),
     );
+    markers.add(Marker(
+        markerId: const MarkerId('MArker1'), position: coordinates.last));
+    notifyListeners();
   }
 
   onGetCurrentLocation(BuildContext context) async {
@@ -75,7 +103,7 @@ class SearchLocationVM extends BaseViewModel {
     setBusy(false);
   }
 
-  onMakePolyline() async {
+  onMakePolyline(context) async {
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleMapsApiKey,
@@ -94,7 +122,8 @@ class SearchLocationVM extends BaseViewModel {
         points: coordinates,
         width: 5,
       ));
-      notifyListeners();
+
+      onMapCreated(googleMapController!, context);
     }
   }
 }

@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:maps_integration/dashboard/search_location/search_location_vm.dart';
 import 'package:stacked/stacked.dart';
 
@@ -27,9 +28,9 @@ class SearchLocationVU extends StackedView<SearchLocationVM> {
                           ? const SizedBox.shrink()
                           : ElevatedButton(
                               onPressed: () {
-                                viewModel.onMakePolyline();
+                                viewModel.onMakePolyline(context);
                               },
-                              child: const Text('Find Directions')),
+                              child: const Text('Get Directions')),
                       viewModel.searchLocations.isEmpty
                           ? const SizedBox.shrink()
                           : searchList(viewModel),
@@ -37,7 +38,9 @@ class SearchLocationVU extends StackedView<SearchLocationVM> {
                   ),
                 ],
               ),
-        bottomSheet: viewModel.distance != null && viewModel.duration != null
+        bottomSheet: viewModel.distance != null &&
+                viewModel.duration != null &&
+                viewModel.polylines.isNotEmpty
             ? _pollyLineBottomSheet(viewModel)
             : const SizedBox.shrink());
   }
@@ -108,7 +111,12 @@ class SearchLocationVU extends StackedView<SearchLocationVM> {
                   OutlineInputBorder(borderRadius: BorderRadius.circular(100)),
               hintText: 'Search for a place'),
           onChanged: (value) {
-            viewModel.onSearch(value, context);
+            if (viewModel.timer != null) {
+              viewModel.timer?.cancel();
+            }
+            viewModel.timer = Timer(const Duration(seconds: 1), () async {
+              viewModel.onSearch(value, context);
+            });
           },
         ),
       ),
