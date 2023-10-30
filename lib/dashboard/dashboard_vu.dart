@@ -77,7 +77,8 @@ class DashboardVU extends StackedView<DashboardVM> {
             onGetLatLng: (latlng) async {
               viewModel.originLatLng = latlng;
               viewModel.originLocation =
-                  await Utils.getAddressFromCoordinates(latlng);
+                  await Utils.getAddressFromCoordinates(latlng); 
+              viewModel.notifyListeners();
             },
           ),
           CHILocationPicker(
@@ -93,7 +94,8 @@ class DashboardVU extends StackedView<DashboardVM> {
             width: double.infinity,
             child: ElevatedButton(
                 onPressed: viewModel.originLatLng != null &&
-                        viewModel.destinationLatLng != null
+                            viewModel.destinationLatLng != null ||
+                        viewModel.originLatLng == viewModel.destinationLatLng
                     ? () {
                         Utils.pushRoute(
                             context,

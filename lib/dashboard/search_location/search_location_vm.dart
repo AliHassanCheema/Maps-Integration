@@ -66,9 +66,6 @@ class SearchLocationVM extends BaseViewModel {
         ),
       ),
     );
-    markers
-        .add(Marker(markerId: const MarkerId('1'), position: coordinates.last));
-    notifyListeners();
   }
 
   onGetCurrentLocation(BuildContext context) async {
