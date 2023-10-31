@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/dashboard/dashboard_vm.dart';
+import 'package:maps_integration/dashboard/direction_picker/direction_picker.dart';
 import 'package:maps_integration/dashboard/location_picker/location_picker.dart';
-import 'package:maps_integration/dashboard/polyline.dart';
 import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
 
@@ -73,39 +73,46 @@ class DashboardVU extends StackedView<DashboardVM> {
               viewModel.notifyListeners();
             }, viewModel.liteModeEnabled, 'Show in lite mode'),
           CHILocationPicker(
-            pickerTitle: viewModel.originLocation,
+            selectedLatLng: viewModel.selectedLatLng,
+            pickerTitle: viewModel.selectedLocation,
             onGetLatLng: (latlng) async {
-              viewModel.originLatLng = latlng;
-              viewModel.originLocation =
-                  await Utils.getAddressFromCoordinates(latlng); 
-              viewModel.notifyListeners();
-            },
-          ),
-          CHILocationPicker(
-            pickerTitle: viewModel.destinationLocation,
-            onGetLatLng: (latlng) async {
-              viewModel.destinationLatLng = latlng;
-              viewModel.destinationLocation =
+              viewModel.selectedLatLng = latlng;
+              viewModel.selectedLocation =
                   await Utils.getAddressFromCoordinates(latlng);
               viewModel.notifyListeners();
             },
           ),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-                onPressed: viewModel.originLatLng != null &&
-                            viewModel.destinationLatLng != null ||
-                        viewModel.originLatLng == viewModel.destinationLatLng
-                    ? () {
-                        Utils.pushRoute(
-                            context,
-                            CHIPolylineWidget(polylineCoordinates: [
-                              viewModel.originLatLng!,
-                              viewModel.destinationLatLng!
-                            ]));
-                      }
-                    : null,
-                child: const Text('Show Directions')),
+          // CHILocationPicker(
+          //   pickerTitle: viewModel.destinationLocation,
+          //   onGetLatLng: (latlng) async {
+          //     viewModel.destinationLatLng = latlng;
+          //     viewModel.destinationLocation =
+          //         await Utils.getAddressFromCoordinates(latlng);
+          //     viewModel.notifyListeners();
+          //   },
+          // ),
+          // SizedBox(
+          //   width: double.infinity,
+          //   child: ElevatedButton(
+          //       onPressed: viewModel.originLatLng != null &&
+          //                   viewModel.destinationLatLng != null ||
+          //               viewModel.originLatLng == viewModel.destinationLatLng
+          //           ? () {
+          //               Utils.pushRoute(
+          //                   context,
+          //                   CHIPolylineWidget(polylineCoordinates: [
+          //                     viewModel.originLatLng!,
+          //                     viewModel.destinationLatLng!
+          //                   ]));
+          //             }
+          //           : null,
+          //       child: const Text('Get Directions')),
+          // ),
+
+          CHIDirectionPicker(
+            onGetDistance: (directionPolyline) {
+              debugPrint('>>>>>>>>>>>>>>> ${directionPolyline.distance}');
+            },
           ),
           Expanded(
             child: GridView.builder(

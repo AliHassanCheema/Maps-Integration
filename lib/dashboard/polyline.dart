@@ -4,22 +4,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/secrets.dart';
 
 class CHIPolylineWidget extends StatefulWidget {
-  CHIPolylineWidget({
-    super.key,
-    required this.polylineCoordinates,
-  });
+  CHIPolylineWidget({super.key, required this.polylineCoordinates});
   List<LatLng> polylineCoordinates;
 
   @override
   State<CHIPolylineWidget> createState() => _CHIPolylineWidgetState();
 }
 
-Set<Polyline> polylines = {};
-Set<Marker> markers = {};
-String? distance;
-String? duration;
-
 class _CHIPolylineWidgetState extends State<CHIPolylineWidget> {
+  Set<Polyline> polylines = {};
+  Set<Marker> markers = {};
+  String? distance;
+  String? duration;
   @override
   void initState() {
     super.initState();
@@ -28,7 +24,19 @@ class _CHIPolylineWidgetState extends State<CHIPolylineWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Distance Polyline')),
+      appBar: AppBar(
+        title: const Text('Directions'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pop(
+                    context,
+                    DirectionPolyline(widget.polylineCoordinates,
+                        distance ?? '--', duration ?? '--'));
+              },
+              icon: const Icon(Icons.check)),
+        ],
+      ),
       body: _googleMapWidget(context),
       bottomSheet: distance != null && duration != null
           ? _pollyLineBottomSheet()
@@ -91,12 +99,34 @@ class _CHIPolylineWidgetState extends State<CHIPolylineWidget> {
 
   onMapCreated(context, GoogleMapController controller) async {
     controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: widget.polylineCoordinates.first,
-          zoom: 16.0,
-        ),
-      ),
+      polylines.isNotEmpty
+          ? CameraUpdate.newLatLngBounds(
+              LatLngBounds(
+                  southwest: LatLng(
+                      widget.polylineCoordinates.first.latitude <=
+                              widget.polylineCoordinates.last.latitude
+                          ? widget.polylineCoordinates.first.latitude
+                          : widget.polylineCoordinates.last.latitude,
+                      widget.polylineCoordinates.first.longitude <=
+                              widget.polylineCoordinates.last.longitude
+                          ? widget.polylineCoordinates.first.longitude
+                          : widget.polylineCoordinates.last.longitude),
+                  northeast: LatLng(
+                      widget.polylineCoordinates.first.latitude <=
+                              widget.polylineCoordinates.last.latitude
+                          ? widget.polylineCoordinates.last.latitude
+                          : widget.polylineCoordinates.first.latitude,
+                      widget.polylineCoordinates.first.longitude <=
+                              widget.polylineCoordinates.last.longitude
+                          ? widget.polylineCoordinates.last.longitude
+                          : widget.polylineCoordinates.first.longitude)),
+              60)
+          : CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: widget.polylineCoordinates.last,
+                zoom: 16.0,
+              ),
+            ),
     );
     await onGetPolyLinePoints();
   }
@@ -159,4 +189,12 @@ class _CHIPolylineWidgetState extends State<CHIPolylineWidget> {
     };
     setState(() {});
   }
+}
+
+class DirectionPolyline {
+  List<LatLng> polylinePoints;
+  String distance;
+  String duration;
+
+  DirectionPolyline(this.polylinePoints, this.distance, this.duration);
 }
