@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maps_integration/location_fields/chi_search_location_picker/chi_search_location_widget.dart';
 import 'package:maps_integration/secrets.dart';
 import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
@@ -126,13 +127,4 @@ class SearchLocationVM extends BaseViewModel {
       onMapCreated(googleMapController!, context);
     }
   }
-}
-
-class SearchLocation {
-  String name;
-  String address;
-  double lat;
-  double lng;
-
-  SearchLocation(this.name, this.address, this.lat, this.lng);
 }

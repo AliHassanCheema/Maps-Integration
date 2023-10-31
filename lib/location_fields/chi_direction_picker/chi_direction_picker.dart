@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:maps_integration/dashboard/chi_location_picker/chi_location_picker.dart';
-import 'package:maps_integration/dashboard/current_location/polyline.dart';
+import 'package:maps_integration/location_fields/chi_location_picker/chi_location_picker.dart';
+import 'package:maps_integration/location_fields/chi_location_picker/polyline.dart';
 import 'package:maps_integration/utils.dart';
 
 // ignore: must_be_immutable
 class CHIDirectionPicker extends StatefulWidget {
-  CHIDirectionPicker({required this.onGetDistance, super.key});
+  CHIDirectionPicker({required this.onGetDirectionPolyline, super.key});
 
-  Function(DirectionPolyline directionPolyline) onGetDistance;
+  Function(DirectionPolyline directionPolyline) onGetDirectionPolyline;
 
   @override
   State<CHIDirectionPicker> createState() => _CHIDirectionPickerState();
@@ -24,6 +24,7 @@ class _CHIDirectionPickerState extends State<CHIDirectionPicker> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -71,7 +72,7 @@ class _CHIDirectionPickerState extends State<CHIDirectionPicker> {
                                         )).then((value) {
                                       distance = value.distance;
                                       duration = value.duration;
-                                      widget.onGetDistance(value);
+                                      widget.onGetDirectionPolyline(value);
                                       setState(() {});
                                     });
                                   }

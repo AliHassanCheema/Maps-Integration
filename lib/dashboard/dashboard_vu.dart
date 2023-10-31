@@ -3,9 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/dashboard/dashboard_vm.dart';
-import 'package:maps_integration/dashboard/chi_direction_picker/chi_direction_picker.dart';
-import 'package:maps_integration/dashboard/chi_location_picker/chi_location_picker.dart';
-import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class DashboardVU extends StackedView<DashboardVM> {
@@ -72,48 +69,6 @@ class DashboardVU extends StackedView<DashboardVM> {
               viewModel.liteModeEnabled = v;
               viewModel.notifyListeners();
             }, viewModel.liteModeEnabled, 'Show in lite mode'),
-          CHILocationPicker(
-            selectedLatLng: viewModel.selectedLatLng,
-            pickerTitle: viewModel.selectedLocation,
-            onGetLatLng: (latlng) async {
-              viewModel.selectedLatLng = latlng;
-              viewModel.selectedLocation =
-                  await Utils.getAddressFromCoordinates(latlng);
-              viewModel.notifyListeners();
-            },
-          ),
-          // CHILocationPicker(
-          //   pickerTitle: viewModel.destinationLocation,
-          //   onGetLatLng: (latlng) async {
-          //     viewModel.destinationLatLng = latlng;
-          //     viewModel.destinationLocation =
-          //         await Utils.getAddressFromCoordinates(latlng);
-          //     viewModel.notifyListeners();
-          //   },
-          // ),
-          // SizedBox(
-          //   width: double.infinity,
-          //   child: ElevatedButton(
-          //       onPressed: viewModel.originLatLng != null &&
-          //                   viewModel.destinationLatLng != null ||
-          //               viewModel.originLatLng == viewModel.destinationLatLng
-          //           ? () {
-          //               Utils.pushRoute(
-          //                   context,
-          //                   CHIPolylineWidget(polylineCoordinates: [
-          //                     viewModel.originLatLng!,
-          //                     viewModel.destinationLatLng!
-          //                   ]));
-          //             }
-          //           : null,
-          //       child: const Text('Get Directions')),
-          // ),
-
-          CHIDirectionPicker(
-            onGetDistance: (directionPolyline) {
-              debugPrint('>>>>>>>>>>>>>>> ${directionPolyline.distance}');
-            },
-          ),
           Expanded(
             child: GridView.builder(
                 itemCount: viewModel.dashboardGrid.length,
