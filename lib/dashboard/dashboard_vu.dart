@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/dashboard/dashboard_vm.dart';
-import 'package:maps_integration/dashboard/direction_picker/direction_picker.dart';
-import 'package:maps_integration/dashboard/location_picker/location_picker.dart';
+import 'package:maps_integration/dashboard/chi_direction_picker/chi_direction_picker.dart';
+import 'package:maps_integration/dashboard/chi_location_picker/chi_location_picker.dart';
 import 'package:maps_integration/utils.dart';
 import 'package:stacked/stacked.dart';
 

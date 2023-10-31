@@ -3,6 +3,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/secrets.dart';
 
+// ignore: must_be_immutable
 class CHIPolylineWidget extends StatefulWidget {
   CHIPolylineWidget({super.key, required this.polylineCoordinates});
   List<LatLng> polylineCoordinates;

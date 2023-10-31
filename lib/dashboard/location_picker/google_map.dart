@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/utils.dart';
 
+// ignore: must_be_immutable
 class CHIGoogleMap extends StatefulWidget {
   CHIGoogleMap({super.key, this.selectedLatLng});
   LatLng? selectedLatLng;

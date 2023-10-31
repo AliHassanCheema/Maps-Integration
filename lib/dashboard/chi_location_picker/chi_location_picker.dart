@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_integration/dashboard/location_picker/google_map.dart';
 import 'package:maps_integration/utils.dart';
 
+// ignore: must_be_immutable
 class CHILocationPicker extends StatelessWidget {
   CHILocationPicker({
     super.key,

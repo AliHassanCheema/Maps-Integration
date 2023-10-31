@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:maps_integration/dashboard/location_picker/location_picker.dart';
-import 'package:maps_integration/dashboard/polyline.dart';
+import 'package:maps_integration/dashboard/chi_location_picker/chi_location_picker.dart';
+import 'package:maps_integration/dashboard/current_location/polyline.dart';
 import 'package:maps_integration/utils.dart';
 
+// ignore: must_be_immutable
 class CHIDirectionPicker extends StatefulWidget {
   CHIDirectionPicker({required this.onGetDistance, super.key});
 
